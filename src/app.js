@@ -47,7 +47,7 @@ window.onload = function() {
   let someTruth = true;
   let someFalse = false;
 
-  let someExpr = "10" === 10;
+  let someExpr = "10" === 10; // This expression evaluates as false.
 
   /**
    * Nullish values
@@ -113,6 +113,15 @@ window.onload = function() {
       isbn10: null,
       is_awesome: true,
     },
+    {
+      title: "The Ultimate Hitchiker's Guide To The Galaxy",
+      author: "Douglas Adams",
+      num_pages: 815,
+      year_published: 2002,
+      isbn13: "978-0-645-45374-7",
+      isbn10: null,
+      is_awesome: true,
+    },
   ];
 
   // This can only really be used with arrays of objects:
@@ -134,4 +143,101 @@ window.onload = function() {
   let lte = 5 <= 10; // This will be truthy.
   let greaterThan = 10 > 5; // This will be truthy.
   let gte = 10 >= 5; // This will be truthy.
+
+  // Plus can add numbers or concatenate strings.
+  let plus = 10 + 10; // This will equal 20.
+  plus = "This first string " + "has been concatenated with this other string.";
+  // console.log(plus);
+  let min = 10 - 10; // This will equal 0.
+  let mul = 10 * 10; // This will equal 100.
+  let div = 10 / 10; // 1
+  let pow = 10 ** 10; // 10000000000
+  let modulo = 10 % 3; // 1
+
+  /**
+   * Iteration
+   * Allows you to run the same code on multiple things.
+   */
+
+  // console.log(
+  //   `The book ${library[0].title}, by ${library[0].author} is a really good read.`
+  // );
+  // console.log(
+  //   `The book ${library[1].title}, by ${library[1].author} is a really good read.`
+  // );
+  // console.log(
+  //   `The book ${library[2].title}, by ${library[2].author} is a really good read.`
+  // );
+
+  // For of loop:
+  // for (const book of library) {
+  //   console.log(
+  //     `The book ${book.title}, by ${book.author} is a really good read.`
+  //   );
+  // }
+
+  // Old-style for loops:
+  // for (let i = 0; i < library.length; i++) {
+  //   console.log(
+  //     `The book ${library[i].title}, by ${library[i].author} is a really good read.`
+  //   );
+  // }
+
+  // While loops:
+  // let someCondition = true;
+  // let oops = 0;
+  // while (someCondition) {
+  //   console.table(library);
+
+  //   oops++;
+  //   if (oops > 25) {
+  //     someCondition = false;
+  //   }
+  // }
+
+  /**
+   * Functions
+   * Let you define or name behavior that you want to use.
+   */
+
+  // Function keyword:
+  function printLibraryBook(book) {
+    console.log(
+      `The book ${book.title}, by ${book.author} is a really good read.`
+    );
+  }
+
+  // for (const book of library) {
+  //   printLibraryBook(book);
+  // }
+
+  // Anonymous function:
+  const fibonacci = (x) => {
+    let prev = 0n;
+    let curr = 1n;
+
+    for (let i = 0; i < x; i++) {
+      let temp = curr;
+      curr = prev + curr;
+      prev = temp;
+    }
+
+    return curr;
+  };
+
+  // console.log(fibonacci(100));
+
+  // Return allows us to get data out of functions.
+  // let bigFib = fibonacci(1000);
+  // console.log("The return value of fibonacci(1000):", bigFib);
+  // let libraryStuff = printLibraryBook(library[0]);
+  // console.log("The return value of printLibraryBook:", libraryStuff);
+
+  // Arrow or anonymous functions support implicit returns.
+  // console.log(
+  //   library.map(
+  //     (book) =>
+  //       `The book ${book.title}, by ${book.author} is a really good read.`
+  //   )
+  // );
 };
