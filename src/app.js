@@ -23,6 +23,12 @@ window.onload = function() {
   let someFmtStr = `This is an interpolated value: ${2 ** 8}`;
 
   let concatStr = "This is the " + "end of the script " + "as we know it.";
+  // We can make an array of text, and use the `join` method that exists on Arrays.
+  let arrStr = ["This", "is", "text", "that", "has", "been", "joined."].join(
+    " "
+  );
+
+  // console.log(arrStr);
 
   /**
    * Numbers!
@@ -31,6 +37,10 @@ window.onload = function() {
   let someNumber = 90210;
   let someInt = 1123581321;
   let someFloat = 3.141592;
+
+  // BigInts let you store really big numbers, but are more restrictive.
+  let someBigInt = 1000000000000000000000000000n;
+  // console.log(someBigInt / 3n);
 
   // Floats are not perfect, but they are pretty good.
   // console.log("Floats are not dense:", 0.1 + 0.2 === 0.3);
@@ -206,11 +216,15 @@ window.onload = function() {
     );
   }
 
-  // for (const book of library) {
-  //   printLibraryBook(book);
+  function helloWorld() {
+    console.log("HELLO WORLD.");
+  }
+
+  // for (const novel of library) {
+  //   printLibraryBook(novel);
   // }
 
-  // Anonymous function:
+  // Anonymous/Arrow function:
   const fibonacci = (x) => {
     let prev = 0n;
     let curr = 1n;
@@ -224,13 +238,40 @@ window.onload = function() {
     return curr;
   };
 
+  /**
+   * Generator functions let us iterate over a function.
+   */
+  const fibGen = function*(n = 15) {
+    let prev = 0n;
+    let curr = 1n;
+
+    for (let i = 0; i < n; i++) {
+      let temp = curr;
+      curr = prev + curr;
+      prev = temp;
+
+      yield prev;
+    }
+  };
+
   // console.log(fibonacci(100));
+
+  // for (const fib of fibGen()) {
+  //   console.log(fib);
+  // }
 
   // Return allows us to get data out of functions.
   // let bigFib = fibonacci(1000);
   // console.log("The return value of fibonacci(1000):", bigFib);
   // let libraryStuff = printLibraryBook(library[0]);
   // console.log("The return value of printLibraryBook:", libraryStuff);
+
+  // Arrow functions don't need returns if you don't use squiggly braces!
+  // console.log(
+  //   library.map((book) => {
+  //     return `The book ${book.title}, by ${book.author} is a really good read.`;
+  //   })
+  // );
 
   // Arrow or anonymous functions support implicit returns.
   // console.log(
