@@ -30,6 +30,9 @@ window.onload = function() {
 
   // console.log(arrStr);
 
+  // You can use this to assemble html nicely!
+  // console.log(["<h1>", "hello world", "</h1>"].join(""));
+
   /**
    * Numbers!
    * A way to store numeric data.
