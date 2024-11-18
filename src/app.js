@@ -3,13 +3,8 @@ import "./style.css";
 import "./assets/img/4geeks.ico";
 
 const BookCard = (book) => {
-  // if (!book.isbn10) {
-  //   console.log(book.title, "doesn't have an isbn-10");
-  // }
-  // if (!book.isbn13) {
-  //   console.log(book.title, "doesn't have an isbn-13");
-  // }
-
+  // Ternary operators take the following form:
+  // expression ? output if true : output if false
   return `
   <div id="demo-card" class="card mb-3" style="width: 20%;">
     <img
@@ -21,18 +16,56 @@ const BookCard = (book) => {
       <h5 class="card-title">${book.title}</h5>
       <h6 class="card-subtitle mb-2 text-body-secondary">${book.author}</h6>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Pages: ${book.num_pages}</li>
-        <li class="list-group-item">Published: ${book.year_published}</li>
-        <li class="list-group-item">ISBN-13: ${book.isbn13}</li>
-        <li class="list-group-item">ISBN-10: ${book.isbn10}</li>
-        <li class="list-group-item">Is this book awesome: Yes.</li>
+        <li class="list-group-item"><strong>Pages:</strong> ${
+          book.num_pages
+        }</li>
+        <li class="list-group-item"><strong>Published:</strong> ${
+          book.year_published
+        }</li>
+        <li class="list-group-item"><strong>ISBN-13:</strong> ${
+          book.isbn13 ? book.isbn13 : "N/A"
+        }</li>
+        <li class="list-group-item"><strong>ISBN-10:</strong> ${
+          book.isbn10 ? book.isbn10 : "N/A"
+        }</li>
+        <li class="list-group-item"><strong>Is this book awesome:</strong> Yes.</li>
       </ul>
     </div>
   </div>
   `;
 };
 
-const tooManyLayers = ["asdf", "qwerty", "zxcv"];
+const DogCard = (dog) => {
+  return `
+  <div id="demo-card" class="card mb-3" style="width: 30%;">
+    <img
+      src="${dog.photo}"
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <h5 class="card-title">${dog.name}</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <figure>
+            <blockquote class="blockquote">
+              <p>${dog.quote}</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+              Someone famous in <cite title="Source Title">${dog.quote_src}</cite>
+            </figcaption>
+          </figure>
+        </li>
+        <li class="list-group-item">
+          ${dog.name} is rated ${dog.adorability}/10 on the
+          totally unbiased dog adorability scale.
+        </li>
+      </ul>
+    </div>
+  </div>
+  `;
+};
+
 const library = [
   {
     title: "Something Wicked This Way Comes",
@@ -78,16 +111,77 @@ const library = [
   },
 ];
 
-window.onload = function() {
+const dogs = [
+  {
+    name: "Rufus",
+    photo: "https://placedog.net/500/500",
+    quote: "Woof.",
+    quote_src: "Barkenheimer",
+    adorability: 12,
+  },
+  {
+    name: "Spot",
+    photo: "https://placedog.net/501/501",
+    quote: "You’re late with dinner. Again.",
+    quote_src: "Charles",
+    adorability: 12,
+  },
+  {
+    name: "Charles",
+    photo: "https://placedog.net/502/502",
+    quote: "I didn’t choose the slobber life; the slobber life chose me.",
+    quote_src: "Barkenheimer",
+    adorability: 12,
+  },
+  {
+    name: "Captain",
+    photo: "https://placedog.net/503/503",
+    quote: "If you didn’t want me to eat it, why did you drop it?",
+    quote_src: "Barkenheimer",
+    adorability: 12,
+  },
+  {
+    name: "Steve",
+    photo: "https://placedog.net/504/504",
+    quote: "I bark because I care.",
+    quote_src: "Cerberus",
+    adorability: 12,
+  },
+  {
+    name: "Lighthouse Dog",
+    photo: "https://placedog.net/505/505",
+    quote: "Ask not for whom the tail wags, it wags for treats.",
+    quote_src: "Barkingway",
+    adorability: 12,
+  },
+];
+
+let library_html = "";
+let dog_html = "";
+
+let toggle = true;
+
+const swapContents = () => {
   const shelf = document.querySelector("#library");
 
-  for (const book of library) {
-    shelf.innerHTML = shelf.innerHTML + BookCard(book);
+  if (toggle) {
+    shelf.innerHTML = library_html;
+  } else {
+    shelf.innerHTML = dog_html;
   }
 
-  // for (const word of tooManyLayers) {
-  //   for (const letter of word) {
-  //     console.log(word, letter);
-  //   }
-  // }
+  toggle = !toggle;
+};
+
+window.onload = function() {
+  for (const book of library) {
+    library_html = library_html + BookCard(book);
+  }
+
+  for (const dog of dogs) {
+    dog_html = dog_html + DogCard(dog);
+  }
+
+  document.querySelector("#library").innerHTML = dog_html;
+  document.querySelector("#swapper").addEventListener("click", swapContents);
 };
