@@ -6,7 +6,7 @@ const BookCard = (book) => {
   // Ternary operators take the following form:
   // expression ? output if true : output if false
   return `
-  <div id="demo-card" class="card mb-3" style="width: 20%;">
+  <div class="card mb-3" style="width: 20%;">
     <img
       src="${book.cover}"
       class="card-img-top"
@@ -35,35 +35,77 @@ const BookCard = (book) => {
   `;
 };
 
+/**
+ * This is waaaaay longer than it was before,
+ * but the tradeoff is that we have more control
+ * over every step of the process.
+ *
+ * Because we are assembling this piece-by-piece
+ * we get to make decisions along the way.
+ */
 const DogCard = (dog) => {
-  return `
-  <div id="demo-card" class="card mb-3" style="width: 30%;">
-    <img
-      src="${dog.photo}"
-      class="card-img-top"
-      alt="..."
-    />
-    <div class="card-body">
-      <h5 class="card-title">${dog.name}</h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <figure>
-            <blockquote class="blockquote">
-              <p>${dog.quote}</p>
-            </blockquote>
-            <figcaption class="blockquote-footer">
-              Someone famous in <cite title="Source Title">${dog.quote_src}</cite>
-            </figcaption>
-          </figure>
-        </li>
-        <li class="list-group-item">
-          ${dog.name} is rated ${dog.adorability}/10 on the
-          totally unbiased dog adorability scale.
-        </li>
-      </ul>
-    </div>
-  </div>
-  `;
+  const newCard = document.createElement("div");
+  newCard.classList.add("card", "mb-3");
+  newCard.style.width = "30%";
+
+  const img = document.createElement("img");
+  img.src = dog.photo;
+  img.classList.add("card-img-top");
+  img.alt = "A cute doggo.";
+
+  newCard.appendChild(img);
+
+  const body = document.createElement("div");
+  body.classList.add("card-body");
+  newCard.appendChild(body);
+
+  const title = document.createElement("h5");
+  title.classList.add("card-title");
+  title.innerHTML = dog.name;
+
+  body.appendChild(title);
+
+  const ul = document.createElement("ul");
+  ul.classList.add("list-group", "list-group-flush");
+  body.appendChild(ul);
+
+  const quote = document.createElement("li");
+  quote.classList.add("list-group-item");
+
+  quote.appendChild(document.createElement("figure"));
+  quote
+    .querySelector("figure")
+    .appendChild(document.createElement("blockquote"));
+
+  quote.querySelector("blockquote").classList.add("blockquote");
+
+  quote.querySelector("blockquote").appendChild(document.createElement("p"));
+  quote.querySelector("blockquote > p").innerHTML = dog.quote;
+
+  quote
+    .querySelector("blockquote")
+    .appendChild(document.createElement("figcaption"));
+  quote.querySelector("figcaption").classList.add("blockquote-footer");
+  quote.querySelector(
+    "figcaption"
+  ).innerHTML = `Someone famous in <cite title="Source Title">${dog.quote_src}</cite>`;
+
+  ul.appendChild(quote);
+
+  const adorable = document.createElement("li");
+  adorable.classList.add("list-group-item");
+  adorable.innerHTML = `${dog.name} is rated ${dog.adorability}/10 on the totally unbiased dog adorability scale.`;
+  ul.appendChild(adorable);
+
+  if (dog.adorability < 10) {
+    adorable.classList.add("bg-warning", "text-dark");
+  } else if (dog.adorability < 15) {
+    adorable.classList.add("bg-info", "text-dark");
+  } else {
+    adorable.classList.add("bg-success");
+  }
+
+  return newCard;
 };
 
 const library = [
@@ -117,7 +159,7 @@ const dogs = [
     photo: "https://placedog.net/500/500",
     quote: "Woof.",
     quote_src: "Barkenheimer",
-    adorability: 12,
+    adorability: 9,
   },
   {
     name: "Spot",
@@ -131,14 +173,14 @@ const dogs = [
     photo: "https://placedog.net/502/502",
     quote: "I didn’t choose the slobber life; the slobber life chose me.",
     quote_src: "Barkenheimer",
-    adorability: 12,
+    adorability: 16,
   },
   {
     name: "Captain",
     photo: "https://placedog.net/503/503",
     quote: "If you didn’t want me to eat it, why did you drop it?",
     quote_src: "Barkenheimer",
-    adorability: 12,
+    adorability: 9001,
   },
   {
     name: "Steve",
@@ -157,7 +199,6 @@ const dogs = [
 ];
 
 let library_html = "";
-let dog_html = "";
 
 let toggle = true;
 
@@ -167,7 +208,7 @@ const swapContents = () => {
   if (toggle) {
     shelf.innerHTML = library_html;
   } else {
-    shelf.innerHTML = dog_html;
+    shelf.replaceChildren(...dogs.map((dog) => DogCard));
   }
 
   toggle = !toggle;
@@ -178,10 +219,8 @@ window.onload = function() {
     library_html = library_html + BookCard(book);
   }
 
-  for (const dog of dogs) {
-    dog_html = dog_html + DogCard(dog);
-  }
-
-  document.querySelector("#library").innerHTML = dog_html;
+  document
+    .querySelector("#library")
+    .replaceChildren(...dogs.map((dog) => DogCard(dog)));
   document.querySelector("#swapper").addEventListener("click", swapContents);
 };
