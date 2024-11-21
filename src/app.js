@@ -222,5 +222,6 @@ window.onload = function() {
   document
     .querySelector("#library")
     .replaceChildren(...dogs.map((dog) => DogCard(dog)));
+    
   document.querySelector("#swapper").addEventListener("click", swapContents);
 };
