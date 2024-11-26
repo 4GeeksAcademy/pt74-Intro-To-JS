@@ -3,11 +3,11 @@ import "./style.css";
 import "./assets/img/4geeks.ico";
 
 const BookCard = (book) => {
-  // Ternary operators take the following form:
-  // expression ? output if true : output if false
-  return `
-  <div class="card mb-3" style="width: 20%;">
-    <img
+  const card = document.createElement("div");
+  card.classList.add("card", "mb-3");
+  card.style.width = "20%";
+
+  card.innerHTML = `<img
       src="${book.cover}"
       class="card-img-top"
       alt="..."
@@ -16,23 +16,27 @@ const BookCard = (book) => {
       <h5 class="card-title">${book.title}</h5>
       <h6 class="card-subtitle mb-2 text-body-secondary">${book.author}</h6>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Pages:</strong> ${
-          book.num_pages
-        }</li>
-        <li class="list-group-item"><strong>Published:</strong> ${
-          book.year_published
-        }</li>
-        <li class="list-group-item"><strong>ISBN-13:</strong> ${
-          book.isbn13 ? book.isbn13 : "N/A"
-        }</li>
-        <li class="list-group-item"><strong>ISBN-10:</strong> ${
-          book.isbn10 ? book.isbn10 : "N/A"
-        }</li>
-        <li class="list-group-item"><strong>Is this book awesome:</strong> Yes.</li>
+        <li class="list-group-item"><strong>Pages:</strong> ${book.num_pages}</li>
+        <li class="list-group-item"><strong>Published:</strong> ${book.year_published}</li>
       </ul>
-    </div>
-  </div>
-  `;
+    </div>`;
+
+  const isbns = `<li class="list-group-item"><strong>ISBN-10:</strong> ${
+    book.isbn10 ? book.isbn10 : "N/A"
+  }</li>
+  <li class="list-group-item"><strong>ISBN-13:</strong> ${
+    book.isbn13 ? book.isbn13 : "N/A"
+  }</li>`;
+
+  // Every html element should be a valid DOM tree.
+  card.querySelector("ul").innerHTML += isbns;
+
+  const awesome = document.createElement("li");
+  awesome.innerHTML = "<strong>Is this book awesome:</strong> Yes.";
+  awesome.classList.add("list-group-item");
+  card.querySelector("ul").appendChild(awesome);
+
+  return card;
 };
 
 /**
@@ -198,30 +202,24 @@ const dogs = [
   },
 ];
 
-let library_html = "";
-
 let toggle = true;
 
 const swapContents = () => {
   const shelf = document.querySelector("#library");
 
   if (toggle) {
-    shelf.innerHTML = library_html;
+    shelf.replaceChildren(...library.map((book) => BookCard(book)));
   } else {
-    shelf.replaceChildren(...dogs.map((dog) => DogCard));
+    shelf.replaceChildren(...dogs.map((dog) => DogCard(dog)));
   }
 
   toggle = !toggle;
 };
 
 window.onload = function() {
-  for (const book of library) {
-    library_html = library_html + BookCard(book);
-  }
-
   document
     .querySelector("#library")
     .replaceChildren(...dogs.map((dog) => DogCard(dog)));
-    
+
   document.querySelector("#swapper").addEventListener("click", swapContents);
 };
