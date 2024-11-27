@@ -112,7 +112,7 @@ const DogCard = (dog) => {
   return newCard;
 };
 
-const library = [
+let library = [
   {
     title: "Something Wicked This Way Comes",
     author: "Ray Bradbury",
@@ -217,9 +217,50 @@ const swapContents = () => {
 };
 
 window.onload = function() {
+  console.log(JSON.stringify(library));
+  console.log(library);
+
+  // LocalStorage is a way to save data past page reffreshes.
+  const initialState = window.localStorage.getItem("nebulous-progress");
+  if (initialState !== null) {
+    document.querySelector("#cool-slider").value = JSON.parse(initialState);
+    document.querySelector(
+      "#cool-progress > .progress-bar"
+    ).style.width = `${JSON.parse(initialState)}%`;
+  }
+
   document
     .querySelector("#library")
     .replaceChildren(...dogs.map((dog) => DogCard(dog)));
 
   document.querySelector("#swapper").addEventListener("click", swapContents);
+
+  // Event listeners let us make things happen when the page is interacted with.
+  document.querySelector("#cool-slider").addEventListener("input", (ev) => {
+    // We save the state of the progress bar here.
+    window.localStorage.setItem(
+      "nebulous-progress",
+      JSON.stringify(ev.target.valueAsNumber)
+    );
+
+    document.querySelector(
+      "#cool-progress > .progress-bar"
+    ).style.width = `${ev.target.valueAsNumber}%`;
+    console.log(
+      `This progress barr is ${ev.target.valueAsNumber}% filled with a disregard for actual progress completed.`
+    );
+  });
+
+  document.querySelector("#book-button").addEventListener("click", (ev) => {
+    ev.preventDefault();
+
+    const data = JSON.parse(document.querySelector("#book-input").value);
+    library.unshift(data);
+
+    if (!toggle) {
+      document
+        .querySelector("#library")
+        .replaceChildren(...library.map((book) => BookCard(book)));
+    }
+  });
 };
